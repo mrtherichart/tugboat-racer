@@ -1,32 +1,17 @@
-name: Build Tugboat Racer
+name: Android APK — Tugboat Racer
+
 on:
   push:
     branches: [main]
   workflow_dispatch:
+
 permissions:
   contents: read
+
+# The Linux build is developed, compiled and tested inside ChatGPT's VM.
+# GitHub receives a mirror of the versioned source ZIP and builds Android only.
 jobs:
-  linux:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install Linux libraries
-        run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev libx11-dev libxcursor-dev libxrandr-dev libxi-dev libasound2-dev libxinerama-dev
-      - name: Install Odin
-        run: bash scripts/install-odin.sh
-      - name: Compile Linux prototype
-        run: |
-          mkdir -p out
-          odin check src
-          odin build src -out:out/tugboat-racer-linux
-      - uses: actions/upload-artifact@v4
-        with:
-          name: tugboat-linux
-          path: out/tugboat-racer-linux
-          if-no-files-found: error
   android:
-    needs: linux
     runs-on: ubuntu-24.04
     timeout-minutes: 50
     steps:
@@ -42,11 +27,12 @@ jobs:
           sdkmanager "platforms;android-34" "build-tools;34.0.0" "ndk;27.2.12479018" "cmake;3.30.3"
       - name: Install Odin
         run: bash scripts/install-odin.sh
-      - name: Build APK
+      - name: Build Android debug APK
         run: |
           export ANDROID_NDK_HOME="$ANDROID_HOME/ndk/27.2.12479018"
           bash scripts/build-android.sh
-      - uses: actions/upload-artifact@v4
+      - name: Upload APK for phone testing
+        uses: actions/upload-artifact@v4
         with:
           name: tugboat-android-debug
           path: raymob/app/build/outputs/apk/debug/*.apk

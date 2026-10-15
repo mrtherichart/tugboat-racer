@@ -1,24 +1,24 @@
 # Tugboat Racer
 
-A lightweight Android 3D arcade racer about old Dutch opduwers, developed through ChatGPT.
+A small native Android arcade game about Dutch **opduwers**, made in **Odin + raylib**.
 
-## Current prototype — v0.1
+## Development workflow
 
-One crude 3D workboat, a canal, throttle, steering and risky overdrive. This is a **toolchain/handling prototype**, not the finished game.
+**ChatGPT's Linux VM is the main development environment.** Gameplay coding, Linux compilation, tests, graphics inspection and debugging happen there. After meaningful changes, the AI creates a **versioned source ZIP**, attaches it in ChatGPT, and checks that the archive is present in the ChatGPT Library.
 
-**Linux controls:** arrows (or WASD), Space to overdrive, R to restart.
-**Android controls:** touchscreen zones labelled LEFT, RIGHT, THROTTLE and BOOST.
+**GitHub is only the Android build/distribution mirror.** The AI copies the same tested source files to this repository, and GitHub Actions compiles an Android APK with RayMob. There is **no GitHub Actions Linux build**. GitHub never replaces the ChatGPT VM or the source-ZIP workflow.
 
-The same `src/` Odin source is compiled for Linux and Android. Linux uses Odin's bundled raylib; Android temporarily assembles the app with RayMob.
+APK downloads: [GitHub Actions](https://github.com/mrtherichart/tugboat-racer/actions). After a successful run, select the Android artifact. Whenever possible the AI also returns the APK directly in the chat.
 
-## Download builds
+See [AI development workflow](docs/AI_WORKFLOW.md).
 
-Open [Actions](https://github.com/mrtherichart/tugboat-racer/actions). A successful workflow has `tugboat-linux` and `tugboat-android-debug` downloads under **Artifacts**. Android delivers a debug-signed APK.
+## First technical prototype (v0.1)
 
-Build verification and real-device startup are separate milestones. Android is experimental until the first APK has launched on a phone.
+The current experimental project contains a simple 3D workboat, flat water, throttle/rudder controls and engine overdrive with overheating. It still requires compilation and device testing.
 
-## Workflow
+Linux: `bash scripts/build-linux.sh` (Odin installed).
+Android: GitHub Actions runs `scripts/build-android.sh`.
 
-ChatGPT edits source and inspects CI results. GitHub stores source and runs builds. The user only needs an APK for Android-specific testing. Toolchain versions are pinned in CI.
+Linux controls: arrows or WASD; Space for overdrive; R to reset. Android: experimental touch zones.
 
-The creative design is in this project's conversation (`tugboat_racer_game_design_v03.md`): playful boat building and painting, varied early-twentieth-century engines, Dutch canals, lightweight arcade physics and risky engine overdrive.
+The creative brief remains [Tugboat Racer Game Design v0.3](https://chatgpt.com/) in this project's ChatGPT conversation; the game aims for lightweight arcade racing and Miel Monteur-style playful mechanical building.
